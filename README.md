@@ -1,1 +1,48 @@
-# ToSJT_curtain
+# 智能窗帘系统
+
+ 	单片机使用stm32f103c8t6，传感器使用环境光传感器，温湿度传感器HDC1080.
+
+​	步进电机，步进电机的驱动为2003
+
+​	ESP8266为联网模块
+
+## 接线
+
+#### 按键接线
+
+---
+
+KEY1	PB9
+
+KEY2	PB8
+
+KEY3	PB7
+
+KEY4	PA0
+
+KEY5	PA1
+
+---
+
+
+
+#### OLED接线
+---
+PA8		SCL(DO)
+PB15	SDA(DI)
+PB14	RES
+PB13	DC
+#PA3		CS
+
+---
+
+#### 串口（接线ESP8266）
+
+---
+
+CH340RXD	PA10
+
+CH340TXD	PA9
+
+---
+
