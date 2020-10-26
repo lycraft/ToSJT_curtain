@@ -12,6 +12,7 @@
 //              DC   接PB13
 //              CS   接PA3               
 //              ----------------------------------------------------------------
+//							ADC-PA2,PA3
 //******************************************************************************/
 #include "delay.h"
 #include "sys.h"
@@ -19,24 +20,16 @@
 #include "bmp.h"
 #include "HDC1080.h"
 #include "key.h"
+#include "timer.h"
 #include "exti.h" 
 #include "adc.h"
+#include "led.h"
 
 int sa=0,sb=0,sc=0,sd=0;
 int wendu,shidu;
+int CountMotor = 0;
 uint8_t modetemp = 6,mode = 4;//modetemp是指示位置 指向选中的mode，==============mode0-4
 uint8_t flag = 1;
-
-void loading()//开机进度条
-{
-	uint8_t loadingcount;
-	OLED_ShowString(24,0,"Loading...");
-	for(loadingcount = 0;loadingcount < 16;loadingcount++)
-	{
-			OLED_ShowChar(loadingcount * 8,5,'>');
-			delay_ms(loadingcount % 8 * 10 + 10);
-	}
-}
 
 void measure1()//屏幕不刷新的东西 
 {
@@ -131,10 +124,10 @@ int main(void)
 		OLED_Init();			//初始化OLED  
 	  HDC1080_Init();
 //		KEY_Init();          //初始化与按键连接的硬件接口
-		EXTIX_Init();
+		EXTIX_Init();					//按键初始化
 	  Adc_Init();		  		//ADC初始化
-		
-	 loading();
+		LED_Init();
+		TIM3_Int_Init(100 - 1,7200 - 1);	 //new 72000000/7200 = 10khz频率		计数到100就是10ms中断服务函数触发一次
 	 
 	while(1) 
 	{		
@@ -203,25 +196,45 @@ int main(void)
 				OLED_Clear();
 				flag--;				
 			}
-			OLED_DrawBMP(0,0,128,8,BMP1);
-			delay_ms(100);
-			OLED_DrawBMP(0,0,128,8,BMP3);
-			delay_ms(100);
-			OLED_DrawBMP(0,0,128,8,GIF3);
-			delay_ms(100);
-			OLED_DrawBMP(0,0,128,8,GIF4);
-			delay_ms(100);
-			OLED_DrawBMP(0,0,128,8,GIF5);
-			delay_ms(100);
-			OLED_DrawBMP(0,0,128,8,GIF6);
-			delay_ms(100);
-			OLED_DrawBMP(0,0,128,8,GIF7);
-			delay_ms(100);
-			OLED_DrawBMP(0,0,128,8,GIF8);
-			delay_ms(100);
-			OLED_DrawBMP(0,0,128,8,GIF9);
-			delay_ms(100);
+			OLED_ShowNum(65,2,CountMotor,3,16);	//显示计数值
+			switch(CountMotor % 4)//开始电机旋转
+			{
+				case 0:
+				{
+					GPIO_ResetBits(GPIOA,GPIO_Pin_7);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉低引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_5);//拉高引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_4); //拉高引脚					
+				}
 
+					;break;
+				case 1:
+				{
+					GPIO_ResetBits(GPIOA,GPIO_Pin_4);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_7);//拉低引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_6);//拉高引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_5); //拉高引脚		
+				}
+					;break;
+				case 2:
+				{
+					GPIO_ResetBits(GPIOA,GPIO_Pin_5);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_4);//拉低引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_7);//拉高引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_6); //拉高引脚		
+				}
+					;break;
+				case 3:
+				{
+					GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_5);//拉低引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_4);//拉高引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_7); //拉高引脚		
+				}
+					;break;
+			}
+
+			
 		}
 	}	  
 }

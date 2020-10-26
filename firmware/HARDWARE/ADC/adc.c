@@ -28,7 +28,7 @@ void  Adc_Init(void)
 
 	RCC_ADCCLKConfig(RCC_PCLK2_Div6);   //设置ADC分频因子6 72M/6=12,ADC最大时间不能超过14M
 
-	//PA1 作为模拟通道输入引脚                         
+	//PA2,3 作为模拟通道输入引脚                         
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;		//模拟输入引脚
 	GPIO_Init(GPIOA, &GPIO_InitStructure);	
