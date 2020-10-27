@@ -127,7 +127,7 @@ int main(void)
 		EXTIX_Init();					//按键初始化
 	  Adc_Init();		  		//ADC初始化
 		LED_Init();
-		TIM3_Int_Init(100 - 1,7200 - 1);	 //new 72000000/7200 = 10khz频率		计数到100就是10ms中断服务函数触发一次
+		TIM3_Int_Init(10 - 1,7200 - 1);	 //new 72000000/7200 = 10khz频率		计数到10就是1ms中断服务函数触发一次
 	 
 	while(1) 
 	{		
@@ -197,18 +197,34 @@ int main(void)
 				flag--;				
 			}
 			OLED_ShowNum(65,2,CountMotor,3,16);	//显示计数值
-			switch(CountMotor % 4)//开始电机旋转
+			switch(CountMotor % 8)//开始电机旋转
 			{
 				case 0:
 				{
 					GPIO_ResetBits(GPIOA,GPIO_Pin_7);//拉低引脚
 					GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉低引脚
-					GPIO_SetBits(GPIOA,GPIO_Pin_5);//拉高引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_5);//拉低引脚
 					GPIO_SetBits(GPIOA,GPIO_Pin_4); //拉高引脚					
 				}
 
 					;break;
 				case 1:
+				{
+					GPIO_ResetBits(GPIOA,GPIO_Pin_7);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉低引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_5);//拉高引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_4); //拉高引脚		
+				}
+					;break;
+				case 2:
+				{
+					GPIO_ResetBits(GPIOA,GPIO_Pin_4);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_7);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉高引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_5); //拉高引脚		
+				}
+					;break;
+				case 3:
 				{
 					GPIO_ResetBits(GPIOA,GPIO_Pin_4);//拉低引脚
 					GPIO_ResetBits(GPIOA,GPIO_Pin_7);//拉低引脚
@@ -216,7 +232,15 @@ int main(void)
 					GPIO_SetBits(GPIOA,GPIO_Pin_5); //拉高引脚		
 				}
 					;break;
-				case 2:
+				case 4:
+				{
+					GPIO_ResetBits(GPIOA,GPIO_Pin_5);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_4);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_7);//拉高引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_6); //拉高引脚		
+				}
+					;break;
+				case 5:
 				{
 					GPIO_ResetBits(GPIOA,GPIO_Pin_5);//拉低引脚
 					GPIO_ResetBits(GPIOA,GPIO_Pin_4);//拉低引脚
@@ -224,7 +248,15 @@ int main(void)
 					GPIO_SetBits(GPIOA,GPIO_Pin_6); //拉高引脚		
 				}
 					;break;
-				case 3:
+				case 6:
+				{
+					GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_5);//拉低引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_4);//拉高引脚
+					GPIO_SetBits(GPIOA,GPIO_Pin_7); //拉高引脚		
+				}
+					;break;
+				case 7:
 				{
 					GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉低引脚
 					GPIO_ResetBits(GPIOA,GPIO_Pin_5);//拉低引脚
