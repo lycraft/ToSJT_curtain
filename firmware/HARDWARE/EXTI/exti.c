@@ -4,10 +4,9 @@
 #include "usart.h"
 #include "oled.h"
 
-extern int sa,sb,sc,sd;
-extern uint8_t mode;
+extern uint8_t mode, MotorDirFlag;
 extern uint8_t flag;
-extern uint8_t modetemp;
+extern uint16_t LightLine;
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK战舰STM32开发板
@@ -88,39 +87,50 @@ void EXTIX_Init(void)
 void EXTI9_5_IRQHandler(void)
 {
 	delay_ms(10);//消抖
-	if(WK_UP==1&&KEY2 == 0)	 	 //按键←
+	if(WK_UP==1&&KEY2 == 0)	 	 //---------------------------按键←
 	{		
-		mode = 4;
-		flag = 1;
+		MotorDirFlag = 2;
 	}
-		if(KEY2==1&&WK_UP == 0)	 	 //按键↑
+		if(KEY2==1&&WK_UP == 0)	 	 //-------------------------按键↑
 	{		
-		sb++;
-		modetemp--;
+		if(mode == 0)
+		{
+			LightLine += 100;
+		}
+		else if(mode == 1)
+		{
+			MotorDirFlag = 0;
+		}
 	}
 		EXTI_ClearITPendingBit(EXTI_Line7); //清除LINE0上的中断标志位  
 		EXTI_ClearITPendingBit(EXTI_Line9); //清除LINE0上的中断标志位 
 }
  
-//外部中断3服务程序			→
+//外部中断3服务程序			切换mode--------------------------------→
 void EXTI1_IRQHandler(void)
 {
 	delay_ms(10);//消抖
 	if(KEY1==0)	 //按键KEY1  
-	{				 
-		mode = modetemp-5;
+	{			
+		mode = !mode;		
 		flag = 1;
 	}		 
 	EXTI_ClearITPendingBit(EXTI_Line1);  //清除LINE3上的中断标志位  
 }
-//↓
+//------------------------------------------------------------------↓
 void EXTI0_IRQHandler(void)
 {
 	delay_ms(10);//消抖
 	if(KEY0==0)	 //按键KEY0   
 	{
-		sd++;
-		modetemp++;
+		if(mode == 0)
+		{
+			LightLine -= 100;
+		}
+		else if(mode == 1)
+		{
+			MotorDirFlag = 1;
+		}
 	}		 
 	EXTI_ClearITPendingBit(EXTI_Line0);  //清除LINE4上的中断标志位  
 }
