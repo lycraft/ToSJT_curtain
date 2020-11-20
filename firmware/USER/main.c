@@ -69,7 +69,7 @@ void Motor_Forward()
 				{
 					GPIO_ResetBits(GPIOA,GPIO_Pin_4);//拉低引脚
 					GPIO_ResetBits(GPIOA,GPIO_Pin_7);//拉低引脚
-					GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉高引脚
+					GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉低引脚
 					GPIO_SetBits(GPIOA,GPIO_Pin_5); //拉高引脚		
 				}
 					;break;
@@ -191,6 +191,14 @@ void Motor_Back()
 			}
 }
 
+void Motor_Stop()
+{
+	GPIO_ResetBits(GPIOA,GPIO_Pin_4);//拉低引脚
+	GPIO_ResetBits(GPIOA,GPIO_Pin_7);//拉低引脚
+	GPIO_ResetBits(GPIOA,GPIO_Pin_6);//拉低引脚
+	GPIO_ResetBits(GPIOA,GPIO_Pin_5);//拉低引脚		
+}
+
 int main(void)
  {	
 		vu8 key=0;
@@ -214,17 +222,8 @@ int main(void)
 		if(CountMotor == 100)
 		{
 			adcx=Get_Adc_Average(ADC_Channel_2,10);//PA2的ADC的AD值
-//			adca=Get_Adc_Average(ADC_Channel_3,10);//PA3的ADC的AD值
 				
 			OLED_ShowNum(65,2,adcx,4,16);	//显示ADC的值
-//			tempadc=(float)adcx*(3.3/4096);
-//			adcx=tempadc;
-//			OLED_ShowNum(65,2,adcx,1,16);	//显示电压值
-//			tempadc-=adcx;
-//			tempadc*=1000;
-//			OLED_ShowNum(75,2,tempadc,3,16);		
-
-				
 		}
 
 
@@ -240,7 +239,11 @@ int main(void)
 			}
 			if(adcx >= LightLine)//光照值大于2000窗帘就开始工作
 			{
-				Motor_Forward();
+				Motor_Forward();				//电机正转
+			}
+			else if(adcx < LightLine)
+			{
+				Motor_Stop();
 			}
 			if(CountMotor == 100)
 			{
@@ -258,11 +261,15 @@ int main(void)
 			}
 			if(MotorDirFlag == 0)
 			{
-				Motor_Forward();
+				Motor_Forward();			//电机正转
 			}
 			if(MotorDirFlag == 1)
 			{
-				Motor_Back();
+				Motor_Back();					//电机反转
+			}
+			if(MotorDirFlag == 2)
+			{
+				Motor_Stop();					//电机停转
 			}
 				
 		}

@@ -123,9 +123,9 @@ void EXTI0_IRQHandler(void)
 	delay_ms(10);//消抖
 	if(KEY0==0)	 //按键KEY0   
 	{
-		if(mode == 0)
+		if(mode == 0)									//mode == 0就是自动模式
 		{
-			LightLine -= 100;
+			LightLine -= 100;						//按键向下
 		}
 		else if(mode == 1)
 		{
