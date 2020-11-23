@@ -29,11 +29,13 @@
 
 #### 串口（接线ESP8266）
 
----
-
 CH340RXD	PA10
 
 CH340TXD	PA9
 
----
+### 步进电机参数
+
+![ZLM}XG8YRF0_8@328KGG7NS](\images\ZLM}XG8YRF0_8@328KGG7NS.png)
+
+可以看到，驱动方式是4相8拍。
 
