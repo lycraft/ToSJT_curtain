@@ -10,31 +10,22 @@
 
 #### 按键接线
 
----
-
-KEY1	PB9  确认
-
-KEY2	PB8 （x）
-
-KEY3	PB7  退出
-
-KEY4	PA0  向上
-
-KEY5	PA1  向下
-
----
-
-
+| name | pin  | status |
+| ---- | ---- | ------ |
+| KEY1 | PB9  | 确认   |
+| KEY2 | PB8  | （x）  |
+| KEY3 | PB7  | 退出   |
+| KEY4 | PA0  | 向上   |
+| KEY5 | PA1  | 向下   |
 
 #### OLED接线
----
-PA8		SCL(DO)
-PB15	SDA(DI)
-PB14	RES
-PB13	DC
-#PA3		CS
-
----
+| pin  | status  |
+| ---- | ------- |
+| PA8  | SCL(DO) |
+| PB15 | SDA(DI) |
+| PB14 | RES     |
+| PB13 | DC      |
+| #PA3 | CS      |
 
 #### 串口（接线ESP8266）
 
