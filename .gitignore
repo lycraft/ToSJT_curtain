@@ -51,6 +51,15 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+#Keil Project screen layout file
+*.uvguix.*
+*.uvgui.*
+*.uvprojx
+*.uvoptx
+
+#JLINK file
+JLinkLog.txt
+
 # PCB
 *.htm
 *.PcbDocPreview
